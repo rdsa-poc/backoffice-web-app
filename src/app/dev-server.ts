@@ -40,7 +40,7 @@ export async function startDevServer(config: AppConfig = loadAppConfig()): Promi
   });
 
   await new Promise<void>((resolve) => {
-    server.listen(config.port, resolve);
+    server.listen(config.port, config.host, resolve);
   });
 
   return server;
@@ -50,7 +50,7 @@ async function main(): Promise<void> {
   const config = loadAppConfig();
   const server = await startDevServer(config);
   process.stdout.write(
-    `bof-web browser SPA shell available at http://localhost:${config.port}\n`,
+    `bof-web browser SPA shell available at http://${config.host}:${config.port}\n`,
   );
   server.on("close", () => {
     process.stdout.write("bof-web dev server stopped\n");
