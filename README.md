@@ -1,6 +1,6 @@
 # Backoffice Web App
 
-Operator-facing web application shell for quiz configuration, execution control, and dashboard views.
+Operator-facing web application shell for stream management, quiz configuration, execution control, and dashboard views.
 
 ## Scope
 
@@ -10,20 +10,23 @@ Operator-facing web application shell for quiz configuration, execution control,
 
 ## Development
 
-- Copy `.env.example` to `.env.local` before first start and keep the `RADIOSA_*` names unchanged.
+- Use the shared root `.env` file at `../.env` as the local discovery source for this shell.
 - `RADIOSA_ENVIRONMENT` identifies the local environment name shared across the PoC.
-- `RADIOSA_APP_ID` must stay aligned with the repo identifier (`bof-web` here).
-- `RADIOSA_API_BASE_URL` points to the local Backoffice BE APP shell, which defaults to `http://localhost:8080`.
+- `BOF_BE_BASE_URL` points to the local Backoffice BE APP shell, which defaults to `http://localhost:8080`.
+- `RADIOSA_APP_ID` is optional for `bof-web`; the shell defaults it to the repo identifier when omitted from the shared root contract.
 - `RADIOSA_PORT` is optional and overrides the local shell port when needed.
-- `npm run dev` starts the local shell on `http://localhost:3000`
-- `npm run start` starts the local shell without file watching
-- `npm run verify` runs the scaffold checks for this repository
+- `npm run dev` starts the local browser SPA preview shell on `http://localhost:3000`
+- `npm run start` starts the same preview shell without file watching
+- `npm run verify` runs the stream management and scaffold checks for this repository
 
 ## Notes
 
 - The shell is intentionally dependency-free so the repo can boot immediately in a clean workspace.
-- The runtime boundary is ready to evolve into the planned Next.js + TypeScript application structure.
-- Startup fails fast with a message that lists any missing required `RADIOSA_*` values.
+- The project now follows the agreed SPA-oriented slice under `src/app`, `src/features`, `src/entities`, `src/shared`, and `src/pages`.
+- The local preview server serves one browser shell and does not implement operator workflows or backend-substitute behavior.
+- Backend discovery and HTTP access stay isolated under `src/shared/api`.
+- Each stream item shows the backend-provided ordinal position, a compact image, a lower-left status icon, the title, and the available actions menu.
+- Startup fails fast with a message that lists any missing required shared root `.env` values.
 
 ## Smoke Flow
 
