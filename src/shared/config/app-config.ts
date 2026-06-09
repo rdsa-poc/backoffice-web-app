@@ -1,12 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 
-const ENVIRONMENT_FILE_URL = new URL("../.env.local", import.meta.url);
+const ENVIRONMENT_FILE_URL = new URL("../../../../.env", import.meta.url);
 const DEFAULT_PORT = 3000;
-const REQUIRED_KEYS = [
-  "RADIOSA_ENVIRONMENT",
-  "RADIOSA_APP_ID",
-  "RADIOSA_API_BASE_URL",
-] as const;
+const DEFAULT_APP_ID = "bof-web";
+const REQUIRED_KEYS = ["RADIOSA_ENVIRONMENT", "BOF_BE_BASE_URL"] as const;
 
 type RequiredKey = (typeof REQUIRED_KEYS)[number];
 type EnvironmentSource = Record<string, string | undefined>;
@@ -69,7 +66,14 @@ export function loadLocalEnvironment(environment: EnvironmentSource = process.en
 }
 
 export function resolveAppConfig(environment: EnvironmentSource = process.env): AppConfig {
-  const missingKeys = REQUIRED_KEYS.filter((key) => readRequiredValue(environment, key) === undefined);
+  const missingKeys = REQUIRED_KEYS.filter((key) => {
+    if (key === "BOF_BE_BASE_URL") {
+      return readDiscoveryValue(environment, key, "RADIOSA_API_BASE_URL") === undefined;
+    }
+
+    return readRequiredValue(environment, key) === undefined;
+  });
+
   if (missingKeys.length > 0) {
     throw new MissingConfigurationError("bof-web", missingKeys);
   }
@@ -77,8 +81,8 @@ export function resolveAppConfig(environment: EnvironmentSource = process.env): 
   const configuredPort = Number(environment.RADIOSA_PORT ?? environment.PORT ?? DEFAULT_PORT);
 
   return {
-    appId: readRequiredValue(environment, "RADIOSA_APP_ID")!,
-    apiBaseUrl: readRequiredValue(environment, "RADIOSA_API_BASE_URL")!,
+    appId: readOptionalValue(environment, "RADIOSA_APP_ID") ?? DEFAULT_APP_ID,
+    apiBaseUrl: readDiscoveryValue(environment, "BOF_BE_BASE_URL", "RADIOSA_API_BASE_URL")!,
     environmentName: readRequiredValue(environment, "RADIOSA_ENVIRONMENT")!,
     port: Number.isFinite(configuredPort) ? configuredPort : DEFAULT_PORT,
   };
@@ -104,6 +108,18 @@ function readRequiredValue(
   environment: EnvironmentSource,
   key: RequiredKey,
 ): string | undefined {
+  return readOptionalValue(environment, key);
+}
+
+function readOptionalValue(environment: EnvironmentSource, key: string): string | undefined {
   const value = environment[key]?.trim();
   return value === "" ? undefined : value;
+}
+
+function readDiscoveryValue(
+  environment: EnvironmentSource,
+  primaryKey: RequiredKey,
+  legacyKey: string,
+): string | undefined {
+  return readOptionalValue(environment, primaryKey) ?? readOptionalValue(environment, legacyKey);
 }
