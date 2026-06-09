@@ -15,9 +15,12 @@ Operator-facing web application shell for stream management, quiz configuration,
 - `BOF_BE_BASE_URL` points to the local Backoffice BE APP shell, which defaults to `http://localhost:8080`.
 - `RADIOSA_APP_ID` is optional for `bof-web`; the shell defaults it to the repo identifier when omitted from the shared root contract.
 - `RADIOSA_PORT` is optional and overrides the local shell port when needed.
+- `RADIOSA_BIND_HOST` is optional and controls which local interface the preview shell binds to. Leave it unset for `127.0.0.1`, or set it to `0.0.0.0` when exposing the stack to other devices.
 - `npm run dev` starts the local browser SPA preview shell on `http://localhost:3000`
 - `npm run start` starts the same preview shell without file watching
 - `npm run verify` runs the stream management and scaffold checks for this repository
+
+For the full local stack bootstrap from the workspace root, use `../scripts/start-local-stack.sh`.
 
 ## Notes
 

@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 
 const ENVIRONMENT_FILE_URL = new URL("../../../../.env", import.meta.url);
+const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 3000;
 const DEFAULT_APP_ID = "bof-web";
 const REQUIRED_KEYS = ["RADIOSA_ENVIRONMENT", "BOF_BE_BASE_URL"] as const;
@@ -12,6 +13,7 @@ export type AppConfig = {
   appId: string;
   apiBaseUrl: string;
   environmentName: string;
+  host: string;
   port: number;
 };
 
@@ -84,6 +86,7 @@ export function resolveAppConfig(environment: EnvironmentSource = process.env): 
     appId: readOptionalValue(environment, "RADIOSA_APP_ID") ?? DEFAULT_APP_ID,
     apiBaseUrl: readDiscoveryValue(environment, "BOF_BE_BASE_URL", "RADIOSA_API_BASE_URL")!,
     environmentName: readRequiredValue(environment, "RADIOSA_ENVIRONMENT")!,
+    host: readOptionalValue(environment, "RADIOSA_BIND_HOST") ?? DEFAULT_HOST,
     port: Number.isFinite(configuredPort) ? configuredPort : DEFAULT_PORT,
   };
 }
