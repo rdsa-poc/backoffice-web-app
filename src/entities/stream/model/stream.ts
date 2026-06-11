@@ -1,14 +1,16 @@
 export type StreamStatus = "draft" | "inactive" | "active";
 export type StreamAction = "delete";
-export type StreamLifecycleAction = "activate" | "deactivate" | "publish";
+export type StreamLifecycleAction = "publish" | "unpublish";
 export type VisibleStreamAction = StreamAction | StreamLifecycleAction | "edit" | "view";
 
 export type StreamListItem = {
   availableActions: VisibleStreamAction[];
+  createdAt: string;
   imageUrl: string;
   position: number;
   status: StreamStatus;
   streamId: string;
+  summary: string;
   title: string;
 };
 
