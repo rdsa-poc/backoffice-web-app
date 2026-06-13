@@ -16,11 +16,11 @@ export function StreamsToolbar({ metrics, onCreateStream }: StreamsToolbarProps)
         <div>
           <h1 className="content-title">Streams</h1>
           <p className="content-subtitle">
-            Manage and monitor the live catalog, review stream summaries, and stage publish changes from one shell.
+            Manage catalog records, review read-only details, and maintain stream CRUD data through the backoffice API.
           </p>
         </div>
         <button className="primary-button" onClick={onCreateStream} type="button">
-          + New Stream
+          + Create Stream
         </button>
       </header>
 

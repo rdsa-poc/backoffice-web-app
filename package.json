@@ -7,15 +7,22 @@
     "start": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "verify": "npm run build"
+    "test:ui": "vitest run test/ui",
+    "test:http": "vitest run test/http-integration",
+    "test:e2e": "playwright test",
+    "verify": "npm run build && npm run test:ui && npm run test:http"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "jsdom": "^26.1.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "vite": "^8.0.16",
+    "vitest": "^3.2.6"
   }
 }

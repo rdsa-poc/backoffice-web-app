@@ -1,14 +1,15 @@
-import type { StreamListItem as StreamListItemModel, VisibleStreamAction } from "../../entities/stream/model/stream.ts";
+import type { StreamBackendAction, StreamCatalogItem } from "../../entities/stream/model/stream.ts";
 import { StreamListItem } from "./StreamListItem.tsx";
 
 type StreamListProps = {
   currentPage: number;
+  isLoading: boolean;
   query: string;
   selectedStreamId?: string;
-  streams: StreamListItemModel[];
+  streams: StreamCatalogItem[];
   totalPages: number;
   totalStreams: number;
-  onAction: (streamId: string, action: VisibleStreamAction) => void;
+  onAction: (stream: StreamCatalogItem, action: StreamBackendAction) => void;
   onPageChange: (page: number) => void;
   onQueryChange: (value: string) => void;
   onSelect: (streamId: string) => void;
@@ -16,6 +17,7 @@ type StreamListProps = {
 
 export function StreamList({
   currentPage,
+  isLoading,
   query,
   selectedStreamId,
   streams,
@@ -34,12 +36,12 @@ export function StreamList({
           <input
             className="search-input"
             onChange={(event) => onQueryChange(event.target.value)}
-            placeholder="Search streams..."
+            placeholder="Search by title or stream ID..."
             value={query}
           />
         </label>
         <div className="field filter" role="button" tabIndex={0}>
-          <span>All Status</span>
+          <span>CRUD Catalog</span>
           <span aria-hidden="true">▾</span>
         </div>
       </div>
@@ -50,6 +52,9 @@ export function StreamList({
         <span>Created</span>
         <span />
       </div>
+
+      {isLoading && streams.length === 0 ? <div className="list-empty-state">Loading stream catalog...</div> : null}
+      {!isLoading && streams.length === 0 ? <div className="list-empty-state">No streams match the current view.</div> : null}
 
       {streams.map((stream) => (
         <StreamListItem
@@ -98,7 +103,7 @@ export function StreamList({
 
 function buildShowingLabel(total: number, page: number, pageSize: number) {
   if (total === 0) {
-    return "No streams match the current filter";
+    return "No streams available";
   }
 
   const start = (page - 1) * pageSize + 1;

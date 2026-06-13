@@ -228,6 +228,12 @@ button { cursor: pointer; }
   border: 1px solid rgba(10, 108, 71, 0.12);
 }
 
+.flash-banner--error {
+  background: rgba(252, 239, 236, 0.96);
+  border: 1px solid rgba(180, 71, 48, 0.18);
+  color: #8a2f1d;
+}
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -288,6 +294,12 @@ button { cursor: pointer; }
   display: flex;
   gap: 12px;
   margin-bottom: 14px;
+}
+
+.list-empty-state {
+  padding: 28px 24px;
+  color: var(--text-muted);
+  text-align: center;
 }
 
 .field {
@@ -383,6 +395,15 @@ button { cursor: pointer; }
   gap: 4px;
 }
 
+.stream-position {
+  margin: 0;
+  color: var(--accent-deep);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .stream-title {
   margin: 0;
   font-size: 1rem;
@@ -412,8 +433,7 @@ button { cursor: pointer; }
   text-transform: uppercase;
 }
 
-.badge::before {
-  content: "";
+.badge-dot {
   width: 8px;
   height: 8px;
   border-radius: 999px;
@@ -573,6 +593,19 @@ button { cursor: pointer; }
   gap: 14px;
 }
 
+.detail-body--form {
+  padding-top: 26px;
+}
+
+.detail-card--empty {
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  text-align: center;
+  color: var(--text-base);
+}
+
 .detail-title {
   margin: 0;
   font-size: 1.95rem;
@@ -610,34 +643,80 @@ button { cursor: pointer; }
 .meta-label { color: var(--text-muted); }
 .meta-value { color: var(--text-base); }
 
-.health-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(242, 247, 242, 0.95), rgba(237, 244, 236, 0.95));
-  border: 1px solid rgba(10, 108, 71, 0.12);
-}
-
-.health-copy { display: grid; gap: 4px; }
-
-.health-title {
-  color: var(--accent-deep);
-  font-size: 0.88rem;
-  font-weight: 800;
-}
-
-.health-caption {
-  color: var(--text-base);
-  font-size: 0.8rem;
-}
-
 .analytics-link {
   border: 0;
   background: transparent;
   color: var(--accent-deep);
+}
+
+.stream-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.form-required {
+  margin-left: 4px;
+  color: #8a2f1d;
+}
+
+.form-input {
+  width: 100%;
+  border: 1px solid rgba(23, 28, 31, 0.14);
+  border-radius: 16px;
+  padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--text-strong);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 132px;
+}
+
+.form-input:focus {
+  outline: 2px solid rgba(10, 108, 71, 0.22);
+  border-color: rgba(10, 108, 71, 0.34);
+}
+
+.form-input:user-invalid,
+.form-input[aria-invalid="true"] {
+  border-color: rgba(180, 71, 48, 0.55);
+  background: rgba(252, 246, 244, 0.95);
+}
+
+.field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #8a2f1d;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.secondary-button {
+  border: 1px solid rgba(23, 28, 31, 0.14);
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-strong);
+  font-weight: 700;
 }
 
 @media (max-width: 1180px) {
@@ -659,7 +738,7 @@ button { cursor: pointer; }
   .content-header,
   .toolbar,
   .pagination,
-  .health-card {
+  .form-actions {
     flex-direction: column;
     align-items: stretch;
   }

@@ -1,17 +1,12 @@
-import type { ReactNode } from "react";
-
-import type { StreamListItem } from "../../entities/stream/model/stream.ts";
+import type { StreamDetail } from "../../entities/stream/model/stream.ts";
 import { MetaRow } from "./MetaRow.tsx";
 import { StatusBadge } from "./StatusBadge.tsx";
 
 type StreamDetailsProps = {
-  detailKicker: string;
-  footerAction?: ReactNode;
-  runtimeMeta: ReactNode;
-  stream: StreamListItem;
+  stream: StreamDetail;
 };
 
-export function StreamDetails({ detailKicker, footerAction, runtimeMeta, stream }: StreamDetailsProps) {
+export function StreamDetails({ stream }: StreamDetailsProps) {
   return (
     <article className="detail-card">
       <div className="detail-image-wrap">
@@ -23,25 +18,15 @@ export function StreamDetails({ detailKicker, footerAction, runtimeMeta, stream 
       <div className="detail-body">
         <div>
           <h2 className="detail-title">{stream.title}</h2>
-          <p className="detail-kicker">{detailKicker}</p>
+          <p className="detail-kicker">Read-only stream detail</p>
         </div>
         <p className="detail-summary">{stream.summary}</p>
         <div className="detail-meta">
           <MetaRow label="Status" value={<StatusBadge compact status={stream.status} />} />
-          <MetaRow label="Stream URL" value={`https://stream.radiosa.fm/${stream.streamId}`} />
-          <MetaRow label="Audio Format" value="AAC" />
-          <MetaRow label="Bitrate" value="128 kbps" />
-          <MetaRow label="Region" value="Global" />
+          <MetaRow label="Stream ID" value={stream.streamId} />
+          <MetaRow label="Stream URL" value={stream.streamUrl} />
           <MetaRow label="Created" value={formatDateTime(stream.createdAt)} />
-          <MetaRow label="Updated" value={formatDateTime(stream.createdAt)} />
-          {runtimeMeta}
-        </div>
-        <div className="health-card">
-          <div className="health-copy">
-            <span className="health-title">Stream is healthy</span>
-            <span className="health-caption">Last checked 30 seconds ago</span>
-          </div>
-          {footerAction}
+          <MetaRow label="Updated" value={formatDateTime(stream.updatedAt)} />
         </div>
       </div>
     </article>

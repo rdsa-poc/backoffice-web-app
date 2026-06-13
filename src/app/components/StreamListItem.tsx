@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { StreamListItem as StreamListItemModel, VisibleStreamAction } from "../../entities/stream/model/stream.ts";
+import type { StreamBackendAction, StreamCatalogItem } from "../../entities/stream/model/stream.ts";
 import { StatusBadge } from "./StatusBadge.tsx";
 
 type StreamListItemProps = {
   isSelected: boolean;
-  item: StreamListItemModel;
-  onAction: (streamId: string, action: VisibleStreamAction) => void;
+  item: StreamCatalogItem;
+  onAction: (stream: StreamCatalogItem, action: StreamBackendAction) => void;
   onSelect: (streamId: string) => void;
 };
 
 export function StreamListItem({ isSelected, item, onAction, onSelect }: StreamListItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const visibleActions = item.availableActions;
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -45,8 +46,9 @@ export function StreamListItem({ isSelected, item, onAction, onSelect }: StreamL
       <div className="stream-main">
         <img alt={`${item.title} cover art`} className="stream-thumb" src={item.imageUrl} />
         <div className="stream-copy">
+          <p className="stream-position">#{item.position}</p>
           <h3 className="stream-title">{item.title}</h3>
-          <p className="stream-summary">{item.summary}</p>
+          <p className="stream-summary">{item.streamId}</p>
         </div>
       </div>
       <div className="stream-status">
@@ -70,25 +72,17 @@ export function StreamListItem({ isSelected, item, onAction, onSelect }: StreamL
           </button>
           {isMenuOpen ? (
             <div className="menu-panel">
-              {item.availableActions.map((action) => (
+              {visibleActions.map((action) => (
                 <button
                   className="menu-item"
                   key={action}
                   onClick={() => {
                     setIsMenuOpen(false);
-                    onAction(item.streamId, action);
+                    onAction(item, action);
                   }}
                   type="button"
                 >
-                  {action === "view"
-                    ? "View Details"
-                    : action === "edit"
-                      ? "Edit"
-                      : action === "publish"
-                        ? "Publish"
-                        : action === "unpublish"
-                          ? "Unpublish"
-                          : "Delete"}
+                  {getActionLabel(item, action)}
                 </button>
               ))}
             </div>
@@ -105,4 +99,24 @@ function formatDate(value: string) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
+}
+
+function getActionLabel(item: StreamCatalogItem, action: StreamBackendAction) {
+  if (action === "publish") {
+    return item.status === "active" ? "Republish" : "Publish";
+  }
+
+  if (action === "unpublish") {
+    return "Unpublish";
+  }
+
+  if (action === "view") {
+    return "View Details";
+  }
+
+  if (action === "edit") {
+    return "Edit";
+  }
+
+  return "Delete";
 }
