@@ -1,32 +1,63 @@
 export type StreamStatus = "draft" | "inactive" | "active";
-export type StreamAction = "delete";
+export type StreamBackendAction = "delete" | "edit" | "publish" | "unpublish" | "view";
 export type StreamLifecycleAction = "publish" | "unpublish";
-export type VisibleStreamAction = StreamAction | StreamLifecycleAction | "edit" | "view";
 
-export type StreamListItem = {
-  availableActions: VisibleStreamAction[];
+export type StreamCatalogItem = {
+  availableActions: StreamBackendAction[];
   createdAt: string;
   imageUrl: string;
   position: number;
   status: StreamStatus;
   streamId: string;
-  summary: string;
   title: string;
 };
 
 export type StreamListResponse = {
-  items: StreamListItem[];
+  items: StreamCatalogItem[];
 };
 
 export type StreamDetail = {
   createdAt: string;
   imageUrl: string;
-  projectionSyncState: "in_sync" | "sync_error";
-  publishedAt: string | null;
   status: StreamStatus;
   streamId: string;
   streamUrl: string;
   summary: string;
   title: string;
   updatedAt: string;
+};
+
+export type StreamMutationInput = {
+  imageUrl: string;
+  streamUrl: string;
+  summary: string;
+  title: string;
+};
+
+export type StreamMutationResult = {
+  status: StreamStatus;
+  streamId: string;
+  updatedAt?: string;
+};
+
+export type StreamDeleteResult = {
+  deleted: true;
+  streamId: string;
+};
+
+export type StreamPublishResult = {
+  projectionTarget: string;
+  status: "active";
+  streamId: string;
+};
+
+export type StreamUnpublishResult = {
+  projectionRemoved: true;
+  status: "inactive";
+  streamId: string;
+};
+
+export type StreamApiIssue = {
+  field: string;
+  message: string;
 };

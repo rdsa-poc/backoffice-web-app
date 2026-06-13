@@ -23,6 +23,7 @@ Operator-facing React SPA for stream management, quiz configuration, execution c
 - `npm run verify` runs the current build verification for this repository.
 
 For the full local stack bootstrap from the workspace root, use `../scripts/start-local-stack.sh`.
+By default that script keeps `bof-be` pointed at cloud Firestore. Use `--firestore-mode emulators` when you want the local Firebase emulator-backed stack instead.
 
 ## Notes
 
